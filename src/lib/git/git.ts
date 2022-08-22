@@ -25,7 +25,7 @@ import {
 import { findRemoteBranch } from './find_remote_branch';
 import { getUserEmail } from './get_email';
 import { getShaOrThrow, getSha, getRemoteSha } from './get_sha';
-import { getGitEditor, getGitPager } from './git_editor';
+import { getConfigValue } from './get_config';
 import { unstagedChanges, trackedUncommittedChanges } from './git_status_utils';
 import { isMerged } from './is_merged';
 import { logLong } from './log';
@@ -76,8 +76,7 @@ function composeGitInternal() {
     getShaOrThrow,
     getSha,
     getRemoteSha,
-    getGitEditor,
-    getGitPager,
+    getConfigValue,
     unstagedChanges,
     trackedUncommittedChanges,
     isMerged,

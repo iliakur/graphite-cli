@@ -1,6 +1,5 @@
 import * as t from '@withgraphite/retype';
 import { execSync } from 'child_process';
-import { getGitEditor, getGitPager } from '../git/git_editor';
 import { CommandFailedError } from '../git/runner';
 import { spiffy } from './spiffy';
 

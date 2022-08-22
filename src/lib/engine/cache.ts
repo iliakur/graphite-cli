@@ -45,6 +45,7 @@ export type TMetaCache = {
   currentBranch: string | undefined;
   currentBranchPrecondition: string;
 
+  getGitConfigValue: (key: string) => string | undefined;
   rebaseInProgress: () => boolean;
   detectStagedChanges: () => boolean;
   findRemoteBranch: () => string | undefined;
@@ -487,6 +488,7 @@ export function composeMetaCache({
       assertBranchIsValidOrTrunkAndGetMeta(branchName);
       return branchName;
     },
+    getGitConfigValue: git.getConfigValue,
     rebaseInProgress: git.rebaseInProgress,
     detectStagedChanges: git.detectStagedChanges,
     findRemoteBranch: () => git.findRemoteBranch(remote),
