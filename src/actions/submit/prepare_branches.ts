@@ -203,6 +203,8 @@ async function getPRCreationInfo(
     fetchReviewers: args.reviewers,
   });
 
+  // World!
+
   const createAsDraft = args.publish
     ? false
     : args.draft || !context.interactive
