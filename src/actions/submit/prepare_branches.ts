@@ -201,6 +201,8 @@ async function getPRCreationInfo(
     fetchReviewers: args.reviewers,
   });
 
+  // This is a test
+
   const createAsDraft = args.publish
     ? false
     : args.draft || !context.interactive
