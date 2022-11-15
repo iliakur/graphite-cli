@@ -28,6 +28,9 @@ export async function continueAction(
       `No Graphite operation to continue — passing through to git.`
     );
     context.splog.info(`Running: "${chalk.yellow('git rebase --continue')}"`);
+    context.splog.info(
+      `Your Graphite state is now out of date. You may need to run stack restack.`
+    );
     context.metaCache.continueGitRebase();
     return;
   }
