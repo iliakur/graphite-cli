@@ -23,12 +23,19 @@ export async function continueAction(
   const branchesToRestack = context.continueConfig.data?.branchesToRestack;
 
   if (!rebasedBranchBase) {
-    clearContinuation(context);
     context.splog.info(
       `No Graphite operation to continue — passing through to git.`
     );
+    clearContinuation(context);
+
     context.splog.info(`Running: "${chalk.yellow('git rebase --continue')}"`);
-    context.metaCache.continueGitRebase();
+    const cont = context.metaCache.continueRebase();
+
+    if (cont.result === 'REBASE_CONFLICT') {
+      printConflictStatus(`Rebase conflict is not yet resolved.`, context);
+      throw new RebaseConflictError();
+    }
+
     return;
   }
 

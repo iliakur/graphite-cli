@@ -103,13 +103,12 @@ export type TMetaCache = {
         rebasedBranchBase: string;
       }
     | { result: 'REBASE_DONE' };
-  continueRebase: (parentBranchRevision: string) =>
+  continueRebase: (parentBranchRevision?: string) =>
     | {
         result: 'REBASE_DONE';
         branchName: string;
       }
     | { result: 'REBASE_CONFLICT' };
-  continueGitRebase: () => void;
   abortRebase: () => void;
 
   isMergedIntoTrunk: (branchName: string) => boolean;
@@ -393,14 +392,16 @@ export function composeMetaCache({
 
   const handleSuccessfulRebase = (
     branchName: string,
-    parentBranchRevision: string
+    parentBranchRevision?: string
   ) => {
     const cachedMeta = assertBranchIsValidAndNotTrunkAndGetMeta(branchName);
 
     updateMeta(branchName, {
       ...cachedMeta,
+      parentBranchRevision:
+        parentBranchRevision ??
+        git.getMergeBase(branchName, cachedMeta.parentBranchName),
       branchRevision: git.getShaOrThrow(branchName),
-      parentBranchRevision,
     });
 
     if (cache.currentBranch && cache.currentBranch in cache.branches) {
@@ -810,7 +811,7 @@ export function composeMetaCache({
       handleSuccessfulRebase(branchName, cachedMeta.parentBranchRevision);
       return { result: 'REBASE_DONE' };
     },
-    continueRebase: (parentBranchRevision: string) => {
+    continueRebase: (parentBranchRevision?: string) => {
       const result = git.rebaseContinue();
       if (result === 'REBASE_CONFLICT') {
         return { result };
@@ -824,9 +825,6 @@ export function composeMetaCache({
       assertBranchIsValidAndNotTrunkAndGetMeta(branchName);
       handleSuccessfulRebase(branchName, parentBranchRevision);
       return { result, branchName };
-    },
-    continueGitRebase: () => {
-      return git.rebaseContinue();
     },
     abortRebase: () => {
       git.rebaseAbort();
